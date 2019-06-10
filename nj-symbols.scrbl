@@ -4,9 +4,9 @@
   scribble/core
   scribble/eval
   racket
-  "3-6j-symbols.rkt"
+  "nj-symbols.rkt"
   (for-label
-   "3-6j-symbols.rkt"
+   "nj-symbols.rkt"
    racket)
   (for-syntax racket))
         
@@ -35,7 +35,7 @@
 @title[#:version ""]{3j and 6j symbols}
 @author{Jacob J. A. Koot}
 
-@(defmodule "3-6j-symbols.rkt" #:packages ())
+@(defmodule "nj-symbols.rkt" #:packages ())
 
 The value of a 3j- or a 6j-symbol is plus or minus the square root of a non-negative rational number.
 The latter can be computed exactly.
