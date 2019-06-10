@@ -10,5 +10,5 @@ The procedures follow formulas C.21, C.36 and C.41 as found in appendix C of:\
 
 *Quantum Mechanics, Volume II, Albert Messiah, North-Holland publishing company.*
 
-Procedures 3j-symbol, 6j-symbol and 9j-symbol return the value proper of an nj-symbol,º
+Procedures 3j-symbol, 6j-symbol and 9j-symbol return the value proper of an nj-symbol,\
 possibly inexact.
