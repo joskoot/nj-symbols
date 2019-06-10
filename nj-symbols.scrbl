@@ -118,6 +118,30 @@ does not satisfy the triangular rule, an error is raised. If @nbr[raise-error?] 
 then not satisfying the triangular relations makes procedure @nbr[exact-6j-symbol]
 return @nbr[0].}
 
+@defproc[(exact-9j-symbol
+         (j1 nonnegative-exact-multiple-of_1/2?)
+         (j2 nonnegative-exact-multiple-of_1/2?)
+         (J12 nonnegative-exact-multiple-of_1/2?)
+         (j3 nonnegative-exact-multiple-of_1/2?)
+         (j4 nonnegative-exact-multiple-of_1/2?)
+         (J34 nonnegative-exact-multiple-of_1/2?)
+         (J13 nonnegative-exact-multiple-of_1/2?)
+         (J24 nonnegative-exact-multiple-of_1/2?)
+         (J nonnegative-exact-multiple-of_1/2?)
+         (raise-error? any/c  #f))
+         (and/c rational? exact?)]{
+(@nbr[exact-9j-symbol]@(lb)
+@(hspace 1)@nbr[j1 j2 J12]@(lb)
+@(hspace 1)@nbr[j3 j4 J34]@(lb)
+@(hspace 1)@nbr[J13 J24 J])
+
+Computes a 9j symbol.
+The sum in each column and each row must be an integer or else an error is raised.
+If @nbr[raise-error?] is @nbr[#f],
+not satisfying all triangular rules makes the procedure return 0.
+If @nbr[raise-error?] is not @nbr[#f],
+not satisfying all triangular rules makes the procedure raise an error.}
+
 @defproc[(3j-symbol
           (j1 nonnegative-exact-multiple-of_1/2?)
           (j2 nonnegative-exact-multiple-of_1/2?)
@@ -151,6 +175,27 @@ Same as@(lb)
  (cond
   ((positive? exact-6j) (sqrt exact-6j)
   ((negative? exact-6j) (- (sqrt (- exact-6j)))))
+  (else 0)))]
+which yields a real number, possibly an inexact one.}
+
+@defproc[(9j-symbol
+          (j1 nonnegative-exact-multiple-of_1/2?)
+          (j2 nonnegative-exact-multiple-of_1/2?)
+          (J12 nonnegative-exact-multiple-of_1/2?)
+          (j3 nonnegative-exact-multiple-of_1/2?)
+          (j4 nonnegative-exact-multiple-of_1/2?)
+          (J34 nonnegative-exact-multiple-of_1/2?)
+          (J13 nonnegative-exact-multiple-of_1/2?)
+          (J24 nonnegative-exact-multiple-of_1/2?)
+          (J nonnegative-exact-multiple-of_1/2?)
+          (raise-error? any/c  #f))
+         (and/c rational? exact?)]{
+Same as@(lb)
+@racketblock[
+(let ((exact-9j (exact-6j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J raise-error?)))
+ (cond
+  ((positive? exact-9j) (sqrt exact-9j)
+  ((negative? exact-9j) (- (sqrt (- exact-9j)))))
   (else 0)))]
 which yields a real number, possibly an inexact one.}
 

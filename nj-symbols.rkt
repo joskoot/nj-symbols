@@ -5,10 +5,11 @@
 ; North-Holland publishing company.
 ; Documentation can be made with 3j-symbol.scrbl
 
-(require (only-in math/number-theory factorial))
+(require (only-in math/number-theory factorial) "add-root-of-rationals.rkt")
 
 (provide exact-3j-symbol 3j-symbol
          exact-6j-symbol 6j-symbol
+         exact-9j-symbol 9j-symbol
          exact-multiple-of_1/2?
          nonnegative-exact-multiple-of_1/2?)
 
@@ -119,6 +120,63 @@
 
 ;----------------------------------------------------------------------------------------------------
 
+(define (exact-9j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J (raise-error? #f))
+
+ (define (arg-error . x) (apply error 'exact-9j-symbol x)) 
+ (define (error-or-0 . x) (if raise-error? (apply error 'exact-9j-symbol x) 0))
+
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol j1)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol j2)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol j3)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol j4)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol J12)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol J34)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol J13)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol J24)
+ (exact-nonnegative-multiple-of_1/2_check exact-9j-symbol J)
+
+ (unless (integer? (+ j1 j2 J12))
+         (arg-error "j1+j2+J12 not integer, given: ~s, ~s and ~s" j1 j2 J12))
+ (unless (integer? (+ j3 j4 J34))
+         (arg-error "j3+j4+J34 not integer, given: ~s, ~s and ~s" j3 j4 J34))
+ (unless (integer? (+ j1 j3 J13))
+         (arg-error "j1+j3+J13 not integer, given: ~s, ~s and ~s" j1 j3 J13))
+ (unless (integer? (+ j2 j4 J24))
+         (arg-error "j2+j4+J24 not integer, given: ~s, ~s and ~s" j2 j4 J24))
+ (unless (integer? (+ J12 J34 J))
+         (arg-error "J12+J34+J not integer, given: ~s, ~s and ~s" J12 J34 J))
+ (unless (integer? (+ J13 J24 J))
+         (arg-error "J13+J24+J not integer, given: ~s, ~s and ~s" J13 J24 J))
+
+ (unless (triangular? j1 j2 J12)
+         (error-or-0 "j1 j2 J12 not triangular, given: ~s, ~s and ~s" j1 j2 J12))
+ (unless (triangular? j3 j4 J34)
+         (error-or-0 "j3 j4 J34 not triangular, given: ~s, ~s and ~s" j3 j4 J34))
+ (unless (triangular? j1 j3 J13)
+         (error-or-0 "j1 j3 J13 not triangular, given: ~s, ~s and ~s" j1 j3 J13))
+ (unless (triangular? j2 j4 J24)
+         (error-or-0 "j2 j4 J24 not triangular, given: ~s, ~s and ~s" j2 j4 J24))
+ (unless (triangular? J12 J34 J)
+         (error-or-0 "J12 J34 J not triangular, given: ~s, ~s and ~s" J12 J34 J))
+ (unless (triangular? J13 J24 J)
+         (error-or-0 "J13 J24 J not triangular, given: ~s, ~s and ~s" J13 J24 J))
+
+ (define min-g (max (abs (- j1 J  )) (abs (- J34 j2)) (abs (- j3 J24)) (abs (- j2 J34))))
+ (define max-g (min      (+ j1 J  )       (+ J34 j2)       (+ j3 J24)       (+ j2 J34)))
+ 
+  (apply add-root-of-rationals
+   (for/list ((g (in-range min-g (add1 max-g))))
+    ((if (even? (* 2 g)) + -)
+     (* (sqr (+ g g 1))
+      (exact-6j-symbol j1  j2  J12
+                       J34 J   g  )
+      (exact-6j-symbol j3  j4  J34
+                       j2  g   J24)
+      (exact-6j-symbol J13 J24 J
+                       g   j1  j3 ))))))
+
+;----------------------------------------------------------------------------------------------------
+
 (define (3j-symbol j1 j2 j3 m1 m2 m3 (raise-error? #f))
  (define x (exact-3j-symbol j1 j2 j3 m1 m2 m3 raise-error?))
  (cond
@@ -132,6 +190,14 @@
   ((negative? x) (- (sqrt (- x))))
   ((positive? x) (sqrt x))
   (else 0)))
+
+(define (9j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J (raise-error? #f))
+ (define x (exact-9j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J raise-error?))
+ (cond
+  ((negative? x) (- (sqrt (- x))))
+  ((positive? x) (sqrt x))
+  (else 0)))
+ 
 
 ;----------------------------------------------------------------------------------------------------
 
@@ -215,5 +281,10 @@
  (unless (= a b) (printf "~s ~s ~s ~s ~s~n" j J g a b))
  (= a b))))
 
+(exact-9j-symbol  2 3 4
+                  1 2 3
+                  2 2 3) ; --> 11/61740
+
 ;To do: add more tests.
 |#
+
