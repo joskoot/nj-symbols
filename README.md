@@ -6,7 +6,7 @@ the square root of a non-negative rational number.\
 The square can be computed exactly.\
 This is what procedures exact-3j-symbol, exact-6j-symbol and exact-9j-symbol do.\
 They return plus or minus the exact square of the value of the nj-symbol.\
-The procedures follow formulas C.21, C.36 and C.41 as found in appendix C of:\
+The procedures follow formulas C.21, C.36 and C.41 as found in appendix C of:
 
 *Quantum Mechanics, Volume II, Albert Messiah, North-Holland publishing company.*
 
