@@ -37,10 +37,11 @@
 
 @(defmodule "nj-symbols.rkt" #:packages ())
 
-The value of a 3j- or a 6j-symbol is plus or minus the square root of a non-negative rational number.
-The latter can be computed exactly.
-Procedures @nbr[exact-3j-symbol] and @nbr[exact-6j-symbol] follow the Racah formulas.
-See C.21 and C.36 in appendix C of
+The value of a 3j-, 6j- or 9j-symbol is plus or minus the square root of a
+non-negative rational number which can be computed exactly.
+Procedures @nbr[exact-3j-symbol], @nbr[exact-6j-symbol] and @nbr[exact-9j-symbol]
+follow the Racah formulas.
+See C.21, C.36 and C.41 in appendix C of
 @italic{Quantum Mechanics, Volume II, @nb{Albert Messiah,} North-Holland publishing company}.
 
 @defproc[(exact-3j-symbol
@@ -60,8 +61,7 @@ Procedure @nbr[exact-3j-symbol] computes 3j-symbols, one of them each time it is
 @nb{The computation} is exact. The procedure returns plus or minus
 the exact square of the value of the 3j-symbol, the sign being that of the 3j-symbol proper.
 The (possibly inexact) value proper can be obtained by means of procedure @nbr[3j-symbol].
-
-Procedure @nbr[exact-3j-symbol] checks all arguments to satisfy their contracts.@(lb)
+The procedure checks all arguments to satisfy their contracts.
 The following four conditions are checked too. 
 
 @itemlist[
@@ -135,12 +135,12 @@ return @nbr[0].}
 @(hspace 1)@nbr[j3 j4 J34]@(lb)
 @(hspace 1)@nbr[J13 J24 J])
 
-Computes a 9j symbol.
+Computes plus or minus the square of a 9j-symbol, the sign being that of the value proper.
 The sum in each column and each row must be an integer or else an error is raised.
-If @nbr[raise-error?] is @nbr[#f],
-not satisfying all triangular rules makes the procedure return 0.
-If @nbr[raise-error?] is not @nbr[#f],
-not satisfying all triangular rules makes the procedure raise an error.}
+If @nbr[raise-error?] is @nbr[#f] and one or more columns and/or rows
+do not satisfy the triangular condition, the procedure returns 0.
+If @nbr[raise-error?] is not @nbr[#f] and one or more columns and/or rows
+do not satisfy the triangular condition, the procedure raises an error.}
 
 @defproc[(3j-symbol
           (j1 nonnegative-exact-multiple-of_1/2?)
@@ -192,7 +192,7 @@ which yields a real number, possibly an inexact one.}
          (and/c rational? exact?)]{
 Same as@(lb)
 @racketblock[
-(let ((exact-9j (exact-6j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J raise-error?)))
+(let ((exact-9j (exact-9j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J raise-error?)))
  (cond
   ((positive? exact-9j) (sqrt exact-9j)
   ((negative? exact-9j) (- (sqrt (- exact-9j)))))
@@ -201,11 +201,11 @@ which yields a real number, possibly an inexact one.}
 
 @defproc[#:kind "predicate"
          (exact-multiple-of_1/2? (x any/c)) boolean?]{
-Returns @nbr[#t] if @nbr[x] is an exact multiple of ½.}
+Returns @nbr[#t] if and only if @nbr[x] is an exact multiple of ½.}
 
 @defproc[#:kind "predicate"
          (nonnegative-exact-multiple-of_1/2? (x any/c)) boolean?]{
-Returns @nbr[#t] if @nbr[x] is a non-negative exact multiple of ½.}
+Returns @nbr[#t] if and only if @nbr[x] is a non-negative exact multiple of ½.}
 
 @(bold (larger (larger "The end")))
 
