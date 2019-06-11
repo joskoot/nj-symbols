@@ -32,7 +32,7 @@
 @(define ↑ superscript)
 @(define ↓ subscript)
 
-@title[#:version ""]{3j and 6j symbols}
+@title[#:version ""]{nj-symbols}
 @author{Jacob J. A. Koot}
 
 @(defmodule "nj-symbols.rkt" #:packages ())
@@ -41,7 +41,7 @@ The value of a 3j-, 6j- or 9j-symbol is plus or minus the square root of a
 non-negative rational number which can be computed exactly.
 Procedures @nbr[exact-3j-symbol], @nbr[exact-6j-symbol] and @nbr[exact-9j-symbol]
 follow the Racah formulas.
-See C.21, C.36 and C.41 in appendix C of
+See formulas C.21, C.36 and C.41 in appendix C of
 @italic{Quantum Mechanics, Volume II, @nb{Albert Messiah,} North-Holland publishing company}.
 
 @defproc[(exact-3j-symbol
