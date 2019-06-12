@@ -189,7 +189,7 @@ which yields a real number, possibly an inexact one.}
           (J24 nonnegative-exact-multiple-of_1/2?)
           (J nonnegative-exact-multiple-of_1/2?)
           (raise-error? any/c  #f))
-         (and/c rational? exact?)]{
+         real?]{
 Same as@(lb)
 @racketblock[
 (let ((exact-9j (exact-9j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J raise-error?)))
