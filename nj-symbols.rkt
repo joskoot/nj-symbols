@@ -108,7 +108,7 @@
  (define j2+j3+J2+J3 (+ j2 j3 J2 J3))
  (define j1+j3+J1+J3 (+ j1 j3 J1 J3))
  
- (triangular-cond exact-6j-symbol
+ (triangular-cond exact-6j-symbol raise-error?
 
   ; Check orthogonality.
   
@@ -172,7 +172,7 @@
  (check-integer J12 J34 J)
  (check-integer J13 J24 J)
 
- (triangular-cond exact-9j-symbol
+ (triangular-cond exact-9j-symbol raise-error?
 
   ; Orthogonality.
                   
@@ -265,10 +265,12 @@
 
 (define-syntax (triangular-cond stx)
  (syntax-case stx (else)
-  ((_ proc (j1 j2 j3) ... (else etc ...))
+  ((_ proc raise-error? (j1 j2 j3) ... (else etc ...))
  #'(cond
     ((not (triangular-inequality? j1 j2 j3))
-     (error 'proc "~s ~s ~s not triangular, given: ~s, ~s and ~s" 'j1 'j2 'j3 j1 j2 j3)) ...
+     (if raise-error?
+      (error 'proc "~s ~s ~s not triangular, given: ~s, ~s and ~s" 'j1 'j2 'j3 j1 j2 j3)
+      0)) ...
     (else etc ...)))))
  
 ;----------------------------------------------------------------------------------------------------
@@ -322,14 +324,14 @@
    (unless (= a b) (printf "~s ~s ~s ~s ~s~n" j J g a b))
    (= a b)))
 
- (exact-6j-symbol 0 0 0
-                  0 0 0) ; --> 1
+ (6j-symbol 0 0 0
+            0 0 0) ; --> 1
 
  (exact-6j-symbol 1 1 2
                   1 1 2) ; --> 1/900
 
- (exact-6j-symbol 1 1 1
-                  1 1 1) ; --> 1/36
+ (6j-symbol 1 1 1
+            1 1 1) ; --> 1/36
 
  (exact-6j-symbol 1/2 1/2 1
                   1/2 1/2 1) ; --> 1/36 
@@ -338,16 +340,22 @@
                   1 2 3
                   2 2 3) ; --> 11/61740
  
- (exact-9j-symbol 0 0 0
-                  0 0 0
-                  0 0 0) ; --> 1
+ (9j-symbol 0 0 0
+            0 0 0
+            0 0 0) ; --> 1
  
- (exact-9j-symbol 1 1 2
-                  1 1 2
-                  2 2 4) ; --> 1/625
+ (9j-symbol 1 1 2
+            1 1 2
+            2 2 4) ; --> 1/625
  
- (exact-9j-symbol 1/2 1/2 1
-                  1/2 1/2 1
-                  1   1   2)) ; --> 1/81
+ (9j-symbol 1/2 1/2 1
+            1/2 1/2 1
+            1   1   2) ; --> 1/81
+
+ (exact-9j-symbol 2 2 3
+                  3 3 4
+                  4 4 7)) ; --> 8/280665
+
+
 
 ;To do: add more tests.
