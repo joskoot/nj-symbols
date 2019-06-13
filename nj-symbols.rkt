@@ -240,6 +240,7 @@
  (and (nonnegative-exact-multiple-of_1/2? j1)
       (nonnegative-exact-multiple-of_1/2? j2)
       (nonnegative-exact-multiple-of_1/2? j3)
+      (integer? (+ j1 j2 j3))
       (triangular-inequality? j1 j2 j3)))
 
 (define (exact-multiple-of_1/2? x)
@@ -266,7 +267,7 @@
  (syntax-case stx (else)
   ((_ proc (j1 j2 j3) ... (else etc ...))
  #'(cond
-    ((not (and (integer? (+ j1 j2 j3) (triangular-inequality? j1 j2 j3))))
+    ((not (triangular-inequality? j1 j2 j3))
      (error 'proc "~s ~s ~s not triangular, given: ~s, ~s and ~s" 'j1 'j2 'j3 j1 j2 j3)) ...
     (else etc ...)))))
  
