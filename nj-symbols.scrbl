@@ -202,8 +202,8 @@ Returns @nbr[#t] if and only if @nbr[x] is an exact multiple of ½.}
 Returns @nbr[#t] if and only if @nbr[x] is a non-negative exact multiple of ½.}
 
 @defproc[(triangular? (j1 any/c) (j2 any/c) (j3 any/c)) boolean?]{
-Returns @nbr[#t] if and only if the three arguments are non-negative exact multiples of ½
-and satisfy the triangular inequality:
+Returns @nbr[#t] if and only if the three arguments are non-negative exact multiples of ½,
+satisfy the triangular inequality and their sum is an integer:
 
 @(hspace 3)@nbr[(<= (abs (- j1 j2)) j3 (+ j1 j2))]
 

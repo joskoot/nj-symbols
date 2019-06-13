@@ -266,14 +266,14 @@
  (syntax-case stx (else)
   ((_ proc (j1 j2 j3) ... (else etc ...))
  #'(cond
-    ((not (triangular-inequality? j1 j2 j3))
+    ((not (and (integer? (+ j1 j2 j3) (triangular-inequality? j1 j2 j3))))
      (error 'proc "~s ~s ~s not triangular, given: ~s, ~s and ~s" 'j1 'j2 'j3 j1 j2 j3)) ...
     (else etc ...)))))
  
 ;----------------------------------------------------------------------------------------------------
 ; Some tests.
 
-(begin
+#;(begin
  (define max-j 10)
  
  (time
