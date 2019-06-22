@@ -14,7 +14,7 @@
 ;----------------------------------------------------------------------------------------------------
 
 (define (add-roots-of-rationals . rrrs)
- (let ((rrrs (read-hash (combine-equals rrrs))))
+ (let ((rrrs (combine-multiples rrrs)))
   (cond
    ((null? rrrs) 0)
    ((null? (cdr rrrs)) (car rrrs))
@@ -35,25 +35,34 @@
       (sum (* sum (abs sum))))
      (* (/ gcd-numerators gcd-denominators) sum))))))
 
-(define (combine-equals rrrs)
- (for/fold ((h (hash))) ((rrr rrrs))
-  (define abs-rrr (abs rrr))
-  (if (zero? rrr) h
-   (hash-set h abs-rrr ((if (negative? rrr) sub1 add1) (hash-ref h abs-rrr 0))))))
+(define (combine-multiples rrrs)
+ (let loop ((h (hash)) (rrrs (sort rrrs abs<)))
+  (cond
+   ((null? rrrs) (read-hash h))
+   (else
+    (define kar (car rrrs))
+    (cond
+     ((zero? kar) (loop h (cdr rrrs)))
+     (else
+      (define abs-kar (abs kar))
+      (define-values (new-h new-rrrs)
+       (for/fold
+        ((h (hash-set h abs-kar ((if (negative? kar) sub1 add1) (hash-ref h abs-kar 0))))
+         (rrrs '()))
+        ((rrr (in-list (cdr rrrs))))
+        (define n ((if (negative? rrr) - +) (sqrt (/ (abs rrr) abs-kar))))
+        (cond
+         ((integer? n) (values (hash-set h abs-kar (+ (hash-ref h abs-kar) n)) rrrs))
+         (else (values h (cons rrr rrrs))))))
+      (loop new-h (reverse new-rrrs))))))))
+
+(define (abs< x y) (< (abs x) (abs y)))
 
 (define (read-hash h)
  (for/fold ((rrrs '())) (((rrr n) (in-hash h)))
   (if (zero? n) rrrs
    (cons (* n (abs n) rrr) rrrs))))
 
-(define (remove-opponent -x rrrs)
- (let/ec ec
-  (let loop ((rrrs rrrs))
-   (cond
-    ((null? rrrs) (ec #f))
-    ((= (car rrrs) -x) (cdr rrrs))
-    (else (cons (car rrrs) (loop (cdr rrrs))))))))
-        
 (define (sqrt-factorize x)
  (define y (factorize x))
  (apply * (map root y)))

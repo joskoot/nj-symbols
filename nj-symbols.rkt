@@ -1,6 +1,6 @@
 #lang racket
 
-; Exact implementation of the Racah formula C.21, c.36 and C.41 in appendix C of
+; Exact implementation of the Racah formula C.21, C.36 and C.41 in appendix C of
 ; Quantum Mechanics, Volume II, Albert Messiah, North-Holland publishing company.
 ; Documentation can be made with 3j-symbol.scrbl
 
@@ -190,7 +190,7 @@
    (define min-g (max (abs (- j1 J  )) (abs (- J34 j2)) (abs (- j3 J24)) (abs (- j2 J34))))
    (define max-g (min      (+ j1 J  )       (+ J34 j2)       (+ j3 J24)       (+ j2 J34)))
  
-   (apply add-root-of-rationals
+   (apply add-roots-of-rationals
     (for/list ((g (in-range min-g (add1 max-g))))
      ((if (even? (* 2 g)) + -)
       (* (sqr (+ g g 1))
@@ -277,6 +277,15 @@
 ; Some tests.
 
 #;(begin
+ 
+ (let ([cp (current-print)]) ; with thanks to Roby Findler
+  (current-print
+   (λ (x)
+     (define sp (open-output-string))
+     (parameterize ([current-output-port sp])
+       (cp x))
+     (display (get-output-string sp)))))
+ 
  (define max-j 10)
  
  (time
@@ -331,11 +340,11 @@
                   1 1 2) ; --> 1/900
 
  (6j-symbol 1 1 1
-            1 1 1) ; --> 1/36
+            1 1 1) ; --> 1/6
 
- (exact-6j-symbol 1/2 1/2 1
-                  1/2 1/2 1) ; --> 1/36 
-                  
+ (6j-symbol 1/2 1/2 1
+            1/2 1/2 1) ; --> 1/6 
+            
  (exact-9j-symbol 2 3 4
                   1 2 3
                   2 2 3) ; --> 11/61740
@@ -346,11 +355,11 @@
  
  (9j-symbol 1 1 2
             1 1 2
-            2 2 4) ; --> 1/625
+            2 2 4) ; --> 1/25
  
  (9j-symbol 1/2 1/2 1
             1/2 1/2 1
-            1   1   2) ; --> 1/81
+            1   1   2) ; --> 1/9
 
  (exact-9j-symbol 2 2 3
                   3 3 4
