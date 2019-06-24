@@ -202,12 +202,17 @@ Returns @nbr[#t] if and only if @nbr[x] is an exact multiple of ½.}
 Returns @nbr[#t] if and only if @nbr[x] is a non-negative exact multiple of ½.}
 
 @defproc[(triangular? (j1 any/c) (j2 any/c) (j3 any/c)) boolean?]{
-Returns @nbr[#t] if and only if the three arguments are non-negative exact multiples of ½,
+Returns @nbr[#t] if and only if
+the three arguments are non-negative exact multiples of ½,
 their sum is an integer and satisfy the triangular inequality:
 
-@(hspace 3)@nbr[(<= (abs (- j1 j2)) j3 (+ j1 j2))]
+@(hspace 3)|@nbr[j1]@(minus)@nbr[j2]| ≤ @nbr[j3] ≤ @nbr[j1]+@nbr[j2]
 
-Procedure @nbr[triangular?] is invariant under permutation of its arguments.}
+which for non-negative @nbr[j1], @nbr[j2] and @nbr[j3] is equivalent with:
+
+@(hspace 3)2@bold{max}(@nbr[j1], @nbr[j2], @nbr[j3]) ≤ @nbr[j1]+@nbr[j2]+@nbr[j3]
+
+Hence, procedure @nbr[triangular?] is invariant under permutation of its arguments.}
 
 @(bold (larger (larger "The end")))
 
