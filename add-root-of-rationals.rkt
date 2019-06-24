@@ -28,8 +28,8 @@
       (gcd-denominators (apply gcd denominators))
       (numerators (map (λ (x) (/ x gcd-numerators)) numerators))
       (denominators (map (λ (x) (/ x gcd-denominators)) denominators))
-      (numerators (map sqrt-factorize numerators))
-      (denominators (map sqrt-factorize denominators))
+      (numerators (map sqrt-factorized numerators))
+      (denominators (map sqrt-factorized denominators))
       (terms (map / numerators denominators))
       (sum (apply + (map * signs terms)))
       (sum (* sum (abs sum))))
@@ -63,15 +63,12 @@
   (if (zero? n) rrrs
    (cons (* n (abs n) rrr) rrrs))))
 
-(define (sqrt-factorize x)
- (define y (factorize x))
- (apply * (map root y)))
-
-(define (root z)
- (define p (car z))
- (define q (cadr z))
- (unless (even? q) (error 'root "square expected, found: ~s^~s" p q))
- (expt p (/ q 2)))
+(define (sqrt-factorized x)
+ (for/fold ((product 1)) ((x (in-list (factorize x))))
+  (define p (car x))
+  (define q (cadr x))
+  (unless (even? q) (error 'sqrt-factorized "square expected, found: ~s^~s" p q))
+  (* product (expt p (/ q 2)))))
 
 #;(begin
    
@@ -82,6 +79,9 @@
      (parameterize ([current-output-port sp])
        (cp x))
      (display (get-output-string sp)))))
+
+ (add-roots-of-rationals) ; --> 0
+ (add-roots-of-rationals 1/3) ; --> 1/3
  (add-roots-of-rationals 3 -12) ; --> -3 because √3-√12 = √3(1-√4) = -√3
  (add-roots-of-rationals 1/3 -1/108 5 -5 -1/5 1/5 -5 5) ; --> 25/108 because:
  ; √(1/3)-√(1/108) = √(1/3)(1-√(1/36)) = √(1/3)(1-1/6) = √(1/3)(5/6) = √(1/3)√(25/36) =
