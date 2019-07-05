@@ -17,7 +17,8 @@
 
 ;----------------------------------------------------------------------------------------------------
 
-(define (exact-3j-symbol j1 j2 j3 m1 m2 m3 (raise-error? #f))
+(define (exact-3j-symbol j1 j2 j3
+                         m1 m2 m3 (raise-error? #f))
 
  ; Check arguments.
  
@@ -75,7 +76,8 @@
 
 ;----------------------------------------------------------------------------------------------------
 
-(define (exact-6j-symbol j1 j2 j3 J1 J2 J3 (raise-error? #f))
+(define (exact-6j-symbol j1 j2 j3
+                         J1 J2 J3 (raise-error? #f))
         
  (define-syntax (define-integer stx)
   (syntax-case stx ()
@@ -144,7 +146,9 @@
 
 ;----------------------------------------------------------------------------------------------------
 
-(define (exact-9j-symbol j1 j2 J12 j3 j4 J34 J13 J24 J (raise-error? #f))
+(define (exact-9j-symbol j1 j2 J12
+                         j3 j4 J34
+                         J13 J24 J (raise-error? #f))
 
  (define-syntax (check-integer stx)
   (syntax-case stx ()
@@ -189,10 +193,11 @@
 
    (define min-g (max (abs (- j1 J  )) (abs (- J34 j2)) (abs (- j3 J24)) (abs (- j2 J34))))
    (define max-g (min      (+ j1 J  )       (+ J34 j2)       (+ j3 J24)       (+ j2 J34)))
+   (define sign (if (integer? min-g) + -))
  
    (apply add-roots-of-rationals
     (for/list ((g (in-range min-g (add1 max-g))))
-     ((if (even? (* 2 g)) + -)
+     (sign
       (* (sqr (+ g g 1))
          (exact-6j-symbol j1  j2  J12
                           J34 J   g  )
@@ -232,7 +237,7 @@
  (/ (* (factorial (+ j1 j2 (- j3)))
        (factorial (+ j2 j3 (- j1)))
        (factorial (+ j3 j1 (- j2))))
-    (factorial (+ j1 j2 j3 1))))
+       (factorial (+ j1 j2 j3 1))))
 
 (define (triangular-inequality? j1 j2 j3) (<= (abs (- j1 j2)) j3 (+ j1 j2)))
 
@@ -278,6 +283,8 @@
 
 #;(begin
  
+ (require test-engine/racket-tests)
+
  (let ([cp (current-print)]) ; with thanks to Roby Findler
   (current-print
    (λ (x)
@@ -304,6 +311,7 @@
      (add1 n))
     (else n))))
  
+(check-expect
  (time
   (for*/and ((l1 (in-range 0 10))
              (l2 (in-range 0 10))
@@ -322,8 +330,9 @@
                                         (factorial (- p l3))))))
       (or
        (zero? sign*square-of-3j-symbol)
-       (xor (even? p) (negative? sign*square-of-3j-symbol))))))))
+       (xor (even? p) (negative? sign*square-of-3j-symbol)))))))) #t)
  
+(check-expect
  (time
   (for*/and ((j (in-range 0 max-j 1/2))
              (J (in-range 0 max-j 1/2))
@@ -331,40 +340,40 @@
    (define a ((if (odd? (+ j J g)) - +) (/ 1 (+ j j 1) (+ J J 1))))
    (define b (exact-6j-symbol j j 0 J J g))
    (unless (= a b) (printf "~s ~s ~s ~s ~s~n" j J g a b))
-   (= a b)))
+   (= a b))) #t)
 
- (6j-symbol 0 0 0
-            0 0 0) ; --> 1
+(check-expect (6j-symbol 0 0 0
+                         0 0 0) 1)
 
- (exact-6j-symbol 1 1 2
-                  1 1 2) ; --> 1/900
+(check-expect (exact-6j-symbol 1 1 2
+                               1 1 2) 1/900)
 
- (6j-symbol 1 1 1
-            1 1 1) ; --> 1/6
+(check-expect (6j-symbol 1 1 1
+                         1 1 1) 1/6)
 
- (6j-symbol 1/2 1/2 1
-            1/2 1/2 1) ; --> 1/6 
+(check-expect (6j-symbol 1/2 1/2 1
+                         1/2 1/2 1) 1/6)
             
- (exact-9j-symbol 2 3 4
-                  1 2 3
-                  2 2 3) ; --> 11/61740
+(check-expect (exact-9j-symbol 2 3 4
+                               1 2 3
+                               2 2 3) 11/61740)
  
- (9j-symbol 0 0 0
-            0 0 0
-            0 0 0) ; --> 1
+(check-expect (9j-symbol 0 0 0
+                         0 0 0
+                         0 0 0) 1)
  
- (9j-symbol 1 1 2
-            1 1 2
-            2 2 4) ; --> 1/25
+(check-expect (9j-symbol 1 1 2
+                         1 1 2
+                         2 2 4) 1/25)
  
- (9j-symbol 1/2 1/2 1
-            1/2 1/2 1
-            1   1   2) ; --> 1/9
+(check-expect (9j-symbol 1/2 1/2 1
+                         1/2 1/2 1
+                         1   1   2) 1/9)
 
- (exact-9j-symbol 2 2 3
-                  3 3 4
-                  4 4 7)) ; --> 8/280665
+(check-expect (exact-9j-symbol 2 2 3
+                               3 3 4
+                               4 4 7) 8/280665)
 
-
+(test))
 
 ;To do: add more tests.
