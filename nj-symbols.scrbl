@@ -35,7 +35,8 @@
 @title[#:version ""]{nj-symbols}
 @author{Jacob J. A. Koot}
 
-@(defmodule "nj-symbols.rkt" #:packages ())
+@;@(defmodule "nj-symbols.rkt" #:packages ())
+@(defmodule nj-symbols/nj-symbols #:packages ())
 
 The values of 3j-, 6j- and 9j-symbols are plus or minus the square roots of
 non-negative rational numbers. The squares can be computed exactly.
@@ -125,9 +126,9 @@ If @nbr[raise-error?] is not @nbr[#f] and one or more of the triples does not sa
          (raise-error? any/c  #f))
          (and/c rational? exact?)]{
 @(hspace 3)(@nbr[exact-9j-symbol]@(lb)
-@(hspace 3)@(hspace 1)@nbr[j1 j2 J12]@(lb)
-@(hspace 3)@(hspace 1)@nbr[j3 j4 J34]@(lb)
-@(hspace 3)@(hspace 1)@nbr[J13 J24 J])
+@(hspace 3)@(hspace 1)@nbr[j1]@(hspace  2)@nbr[j2]@(hspace  2)@nbr[J12]@(lb)
+@(hspace 3)@(hspace 1)@nbr[j3]@(hspace  2)@nbr[j4]@(hspace  2)@nbr[J34]@(lb)
+@(hspace 3)@(hspace 1)@nbr[J13]@(hspace 1)@nbr[J24]@(hspace 1)@nbr[J])
 
 Computes plus or minus the square of a 9j-symbol, the sign being that of the value proper.
 The sum in each column and each row must be an integer or else an error is raised.
@@ -203,7 +204,7 @@ Returns @nbr[#t] if and only if @nbr[x] is a non-negative exact multiple of ½.}
 
 @defproc[(triangular? (j1 any/c) (j2 any/c) (j3 any/c)) boolean?]{
 Returns @nbr[#t] if and only if
-the three arguments are non-negative exact multiples of ½,
+the three arguments are @nbrl[nonnegative-exact-multiple-of_1/2?]{non-negative exact multiples of ½},
 their sum is an integer and satisfy the triangular inequality:
 
 @(hspace 3)|@nbr[j1]@(minus)@nbr[j2]| ≤ @nbr[j3] ≤ @nbr[j1]+@nbr[j2]
