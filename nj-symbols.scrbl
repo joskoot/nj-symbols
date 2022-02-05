@@ -46,7 +46,7 @@ They follow the Racah formulas C.21, C.36 and C.41 in appendix C of
 @italic{Quantum Mechanics, Volume II, @nb{Albert Messiah,} North-Holland publishing company}.
 The computation of the squares of 3j and 6j symbols is easy by straight following the formulas.
 The computation of a 9j symbol requires the additione of square roots of rational numbers,
-which is somewhat more compliacted, but is possible,
+which is somewhat more complicated, but is possible,
 provided the result already is known to be the square root of a rational number.
 
 
