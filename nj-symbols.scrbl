@@ -44,6 +44,11 @@ That is what procedures
 @nbr[exact-3j-symbol], @nbr[exact-6j-symbol] and @nbr[exact-9j-symbol] do.
 They follow the Racah formulas C.21, C.36 and C.41 in appendix C of
 @italic{Quantum Mechanics, Volume II, @nb{Albert Messiah,} North-Holland publishing company}.
+The computation of the squares of 3j and 6j symbols is easy by straight following the formulas.
+The computation of a 9j symbol requires the additione of square roots of rational numbers,
+which is somewhat more compliacted, but is possible,
+provided the result already is known to be the square root of a rational number.
+
 
 @defproc[(exact-3j-symbol
           (j1 nonnegative-exact-multiple-of_1/2?)
